@@ -1,0 +1,4 @@
+@mixin text-style--16-24 ($size: 16, $height: 24) {
+  font-size: #{$size}px;
+  line-height: #{$height}px;
+}
