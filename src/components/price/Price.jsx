@@ -21,7 +21,7 @@ const Price = () => {
       <p className="price__title">Цена</p>
       <ul>{
         Object.values(chooseByPriceRange).map(({name, title, value}) => (
-        <li className="price__li" key={name}>
+        <li className="price__li price__li--first" key={name}>
           <label className="price__label" htmlFor={name}>
             {title}
           </label>

@@ -16,6 +16,10 @@ li {
   list-style-type: none;
 }
 
+label, input, button {
+  cursor: pointer;
+}
+
 a {
   text-decoration: none;
 }
@@ -47,4 +51,20 @@ main {
 
   width: 70%;
   padding-left: 20px;
+}
+
+section {
+  margin: 20px 0;
+}
+
+section > p {
+  @include text-style--16-24(15);
+  font-weight: bold;
+}
+
+section > ul > li {
+  display: flex;
+  align-items: center;
+
+  @include text-style--16-24(14);
 }

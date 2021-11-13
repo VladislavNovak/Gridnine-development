@@ -1,0 +1,18 @@
+.price__li {
+  display: flex;
+  justify-content: space-between;
+
+  &--first {
+    margin-bottom: 15px;
+  }
+}
+
+.price__label {
+  margin-right: 5px;
+}
+
+.price__tel {
+  width: 140px;
+
+  font-family: 'Montserrat', sans-serif;
+}
