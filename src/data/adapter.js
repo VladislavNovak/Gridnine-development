@@ -37,12 +37,34 @@ const convertDataToClient = ({flightToken, flight}) => {
   };
 };
 
-// ВОЗВРАЩАЕТ АДАПТИРОВАННЫЙ ОБЪЕКТ
+// ВОЗВРАЩАЕТ АДАПТИРОВАННЫЙ МАССИВ ОБЪЕКТОВ
 // Получает объект или массив объектов типа: (flights), (flights, 1), (flights[0])
 // Если передан массив, то учитывается переданная вторым аргументом длина
 // Если передан объект, он преобразовывается в массив
-export const adaptFlightToClient = (arg, amount) => {
-  return (Array.isArray(arg))
+export const adaptFlightToClient = (arg, amount) => (
+  (Array.isArray(arg))
     ? (arg.slice(0, amount || arg.length).map(convertDataToClient))
-    : (Array(arg).map(convertDataToClient));
+    : (Array(arg).map(convertDataToClient))
+);
+
+// ВОЗВРАЩАЕТ МАССИВ ОБЪЕКТОВ типа {name: 'Air France', minPrice: 8899, checked: false}
+// Получает адаптированный массив объектов после adaptFlightToClient
+// Сначала пытается найти объект в массиве
+// Если такового нет, формирует его
+// Если есть, тогда сравнивает стоимость и, если новая стоимость меньше, добавляет её
+export const getUniqueCarriers = (data) => {
+  const uniqueCarriers = data.reduce((total, {carrier, price}) => {
+    const found = total.find(item => item.name === carrier);
+
+    if (!found) {
+      total = [...total, {name: carrier, minPrice: Number(price), checked: false}];
+    } else {
+      if (found.minPrice > Number(price)) {
+        total = [...total.map(item => item.name === found.name ? {...item, minPrice: Number(price)} : item)];
+      }
+    }
+    return total;
+  }, []);
+
+  return uniqueCarriers;
 };
