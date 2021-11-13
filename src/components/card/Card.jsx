@@ -1,7 +1,8 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
+import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import AeroflotIcon from '../../assets/icons/01-afl logo russ.png';
+import {displayDuration} from '../../utils/function';
 
 const Card = ({flight}) => {
   const {
@@ -58,9 +59,7 @@ const Card = ({flight}) => {
             </p>
             <p className="card__time-duration">
               <span className="card__time-symbol">&#9719;&#8194;</span>
-              <span className="card__time-interval">
-                {`${Math.floor(firstTravelDuration / 60)} ч ${firstTravelDuration % 60} мин`}
-              </span>
+              <span className="card__time-interval">{displayDuration(firstTravelDuration)}</span>
             </p>
             <p className="card__time-airport">
               <span className="card__time-date">{dayjs(firstArrivalDate).format(`DD.MMM.ddd`)}</span>
@@ -91,9 +90,7 @@ const Card = ({flight}) => {
             </p>
             <p className="card__time-duration">
               <span className="card__time-symbol">&#9719;&#8194;</span>
-              <span className="card__time-interval">
-                {`${Math.floor(secondTravelDuration / 60)} ч ${secondTravelDuration % 60} мин`}
-              </span>
+              <span className="card__time-interval">{displayDuration(secondTravelDuration)}</span>
             </p>
             <p className="card__time-airport">
               <span className="card__time-date">{dayjs(secondArrivalDate).format(`DD.MMM.ddd`)}</span>
@@ -110,5 +107,34 @@ const Card = ({flight}) => {
     </li>
   );
 };
+
+Card.propTypes = {
+  flight: PropTypes.shape({
+    price: PropTypes.number.isRequired,
+    firstTravelDuration: PropTypes.number.isRequired,
+    firstAirline: PropTypes.string.isRequired,
+    firstTransfer: PropTypes.number.isRequired,
+    firstDepartureCity: PropTypes.string.isRequired,
+    firstDepartureAirport: PropTypes.string.isRequired,
+    firstDepartureAirportTag: PropTypes.string.isRequired,
+    firstDepartureDate: PropTypes.string.isRequired,
+    firstArrivalCity: PropTypes.string.isRequired,
+    firstArrivalAirport: PropTypes.string.isRequired,
+    firstArrivalAirportTag: PropTypes.string.isRequired,
+    firstArrivalDate: PropTypes.string.isRequired,
+    secondTravelDuration: PropTypes.number.isRequired,
+    secondAirline: PropTypes.string.isRequired,
+    secondTransfer: PropTypes.number.isRequired,
+    secondDepartureCity: PropTypes.string.isRequired,
+    secondDepartureAirport: PropTypes.string.isRequired,
+    secondDepartureAirportTag: PropTypes.string.isRequired,
+    secondDepartureDate: PropTypes.string.isRequired,
+    secondArrivalCity: PropTypes.string.isRequired,
+    secondArrivalAirport: PropTypes.string.isRequired,
+    secondArrivalAirportTag: PropTypes.string.isRequired,
+    secondArrivalDate: PropTypes.string.isRequired
+  }).isRequired,
+};
+
 
 export default Card;

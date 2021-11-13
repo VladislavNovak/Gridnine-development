@@ -1,3 +1,5 @@
+import {UNNOWN} from "../utils/constants";
+
 const convertDataToClient = ({flightToken, flight}) => {
   const firstTransfer = flight.legs[0].segments.length - 1;
   const secondTransfer = flight.legs[1].segments.length - 1;
@@ -22,7 +24,7 @@ const convertDataToClient = ({flightToken, flight}) => {
     firstDepartureAirportTag: flight.legs[0].segments[0].departureAirport.uid,
     firstDepartureDate: flight.legs[0].segments[0].departureDate,
 
-    firstArrivalCity: (flight.legs[0].segments[firstTransfer] && flight.legs[0].segments[firstTransfer].arrivalCity && flight.legs[0].segments[firstTransfer].arrivalCity.caption) || `UNNOWN`,
+    firstArrivalCity: (flight.legs[0].segments[firstTransfer] && flight.legs[0].segments[firstTransfer].arrivalCity && flight.legs[0].segments[firstTransfer].arrivalCity.caption) || UNNOWN,
     firstArrivalAirport: flight.legs[0].segments[firstTransfer].arrivalAirport.caption,
     firstArrivalAirportTag: flight.legs[0].segments[firstTransfer].arrivalAirport.uid,
     firstArrivalDate: flight.legs[0].segments[firstTransfer].arrivalDate,
@@ -31,12 +33,12 @@ const convertDataToClient = ({flightToken, flight}) => {
     secondAirline: flight.legs[1].segments[0].airline.caption,
     secondTransfer,
 
-    secondDepartureCity: (flight.legs[1].segments[0] && flight.legs[1].segments[0].departureCity && flight.legs[1].segments[0].departureCity.caption) || `UNNOWN`,
+    secondDepartureCity: (flight.legs[1].segments[0] && flight.legs[1].segments[0].departureCity && flight.legs[1].segments[0].departureCity.caption) || UNNOWN,
     secondDepartureAirport: flight.legs[1].segments[0].departureAirport.caption,
     secondDepartureAirportTag: flight.legs[1].segments[0].departureAirport.uid,
     secondDepartureDate: flight.legs[1].segments[0].departureDate,
 
-    secondArrivalCity: (flight.legs[1].segments[secondTransfer] && flight.legs[1].segments[secondTransfer].arrivalCity && flight.legs[1].segments[secondTransfer].arrivalCity.caption) || `UNNOWN`,
+    secondArrivalCity: (flight.legs[1].segments[secondTransfer] && flight.legs[1].segments[secondTransfer].arrivalCity && flight.legs[1].segments[secondTransfer].arrivalCity.caption) || UNNOWN,
     secondArrivalAirport: flight.legs[1].segments[secondTransfer].arrivalAirport.caption,
     secondArrivalAirportTag: flight.legs[1].segments[secondTransfer].arrivalAirport.uid,
     secondArrivalDate: flight.legs[1].segments[secondTransfer].arrivalDate,

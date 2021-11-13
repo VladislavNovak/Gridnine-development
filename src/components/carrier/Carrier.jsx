@@ -1,5 +1,7 @@
 import React, {useContext} from 'react';
 import {ControlContext} from '../../context/control/controlContext';
+import {MAX_TITLE_LENGTH} from '../../utils/constants';
+import {slicedTitle} from '../../utils/function';
 
 const Carrier = () => {
   const {getCarrierState, updateCarrier} = useContext(ControlContext);
@@ -25,7 +27,7 @@ const Carrier = () => {
               onChange={handleChange}
               className="carrier__checkbox" />
             <label className="carrier__label" htmlFor={name}>
-              - {`${name} от ${minPrice} р.`}
+              - {`${slicedTitle(name, MAX_TITLE_LENGTH)} от ${minPrice} р.`}
             </label>
           </li>
         ))

@@ -1,31 +1,40 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {ControlContext} from '../../context/control/controlContext';
 import {fetchServerData} from '../../data/fetchData';
+import {DISPLAY} from '../../utils/constants';
 import {Card} from '..';
 
 const Cards = () => {
   const [data, setData] = useState([]);
+  const [displayed, setDisplayed] = useState(DISPLAY);
   const {createCarrier} = useContext(ControlContext);
 
-  console.log(`datax: `, data);
+  const slicedData = data.slice(0, displayed);
 
   useEffect(() => {
     if (!data.length) {
-      fetchServerData(2).then(({flights, uniqueCarriers}) => {
+      fetchServerData().then(({flights, uniqueCarriers}) => {
         setData(flights);
         createCarrier(uniqueCarriers);
       });
     }
   }, []);
 
+  const handleClick = () => {
+    setDisplayed(displayed + DISPLAY);
+  };
+
   return (
     <div className="cards">
       <ul className="cards__ul">{
-        data.map(flight => (
-          <Card key={flight.id} flight={flight} />
-        ))
+        slicedData.map(flight => (
+          <Card key={flight.id} flight={flight} />))
       }</ul>
-      <button className="cards__btn-more">Показать еще</button>
+      {data.length
+        ? (<button
+            className="cards__btn-more"
+            onClick={handleClick}>Показать еще</button>)
+        : null}
     </div>
   );
 };
