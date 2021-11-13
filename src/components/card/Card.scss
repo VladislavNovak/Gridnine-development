@@ -1,0 +1,115 @@
+.card {
+  display: flex;
+  flex-direction: column;
+
+  margin: 10px 0;
+}
+
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 15px;
+
+  background-color: $primary-bg;
+}
+
+.card__title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  color: #fff;
+
+  &-price {
+    @include text-style--16-24(20);
+    font-weight: bold;
+
+    margin: 5px 0;
+  }
+
+  &-notification {
+    @include text-style--16-24(10, 16);
+
+    margin: 3px 0;
+  }
+}
+
+.card__li {
+  display: flex;
+  flex-direction: column;
+
+  padding: 0 20px;
+
+  &--first {
+    border-bottom: 2px solid $primary-bg;
+  }
+}
+
+.card__airport {
+  display: flex;
+  align-items: center;
+
+  font-weight: 500;
+  border-bottom: 1px solid $primary-gray;
+
+  &-name {
+    @include text-style--16-24(18);
+  }
+
+  &-tag {
+    @include text-style--16-24(17);
+    color: $primary-bg;
+  }
+
+  &-arrow {
+    @include text-style--16-24(25);
+    color: $primary-bg;
+  }
+}
+
+.card__time {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  font-weight: 500;
+  border-bottom: 1px solid $primary-gray;
+
+  &-date {
+    @include text-style--16-24(15);
+    color: $primary-bg;
+  }
+
+  &-transfer {
+    position: absolute;
+    top: 96%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    padding: 0 15px;
+
+    color: $primary-orange;
+    background-color: #fff;
+  }
+}
+
+.card__airlines {
+  @include text-style--16-24(14);
+
+  padding: 15px 0;
+}
+
+.card__btn {
+  @include text-style--16-24(18);
+
+  padding: 8px 25px;
+
+  border: none;
+
+  color: #fff;
+  background-color: $primary-orange;
+}

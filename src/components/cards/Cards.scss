@@ -1,0 +1,19 @@
+.cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+}
+
+.cards__ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cards__btn-more {
+  @include text-style--16-24(18);
+
+  width: 30%;
+}
