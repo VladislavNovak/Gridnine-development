@@ -1,13 +1,19 @@
 const convertDataToClient = ({flightToken, flight}) => {
   const firstTransfer = flight.legs[0].segments.length - 1;
   const secondTransfer = flight.legs[1].segments.length - 1;
+  const firstTravelDuration = firstTransfer
+    ? (Number(flight.legs[0].segments[0].travelDuration) + Number(flight.legs[0].segments[firstTransfer].travelDuration))
+    : Number(flight.legs[0].segments[0].travelDuration);
+  const secondTravelDuration = secondTransfer
+    ? (Number(flight.legs[1].segments[0].travelDuration) + Number(flight.legs[1].segments[secondTransfer].travelDuration))
+    : Number(flight.legs[1].segments[0].travelDuration);
 
   return {
     id: flightToken,
     carrier: flight.carrier.caption,
     price: Number(flight.price.totalFeeAndTaxes.amount),
 
-    firstTravelDuration: flight.legs[0].segments[0].travelDuration,
+    firstTravelDuration,
     firstAirline: flight.legs[0].segments[0].airline.caption,
     firstTransfer,
 
@@ -21,7 +27,7 @@ const convertDataToClient = ({flightToken, flight}) => {
     firstArrivalAirportTag: flight.legs[0].segments[firstTransfer].arrivalAirport.uid,
     firstArrivalDate: flight.legs[0].segments[firstTransfer].arrivalDate,
 
-    secondTravelDuration: flight.legs[1].segments[0].travelDuration,
+    secondTravelDuration,
     secondAirline: flight.legs[1].segments[0].airline.caption,
     secondTransfer,
 

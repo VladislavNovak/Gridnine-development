@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
+import dayjs from 'dayjs';
 import AeroflotIcon from '../../assets/icons/01-afl logo russ.png';
 
 const Card = ({flight}) => {
@@ -26,8 +27,7 @@ const Card = ({flight}) => {
     secondArrivalCity,
     secondArrivalAirport,
     secondArrivalAirportTag,
-    secondArrivalDate,
-    } = flight;
+    secondArrivalDate,} = flight;
 
   return (
     <li className="card">
@@ -42,27 +42,29 @@ const Card = ({flight}) => {
         <li className="card__li card__li--first">
           <div className="card__airport">
             <p className="card__airport-paragraph">
-              <span className="card__airport-name">{firstDepartureCity}, {firstDepartureAirport}</span>
+              <span className="card__airport-name">{`${firstDepartureCity}, ${firstDepartureAirport}`}</span>
               <span className="card__airport-tag">({firstDepartureAirportTag})</span>
             </p>
             <span className="card__airport-arrow">&ensp;&#129042;&ensp;</span>
             <p className="card__airport-paragraph">
-              <span className="card__airport-name">{firstArrivalCity}, {firstArrivalAirport}</span>
+              <span className="card__airport-name">{`${firstArrivalCity}, ${firstArrivalAirport}`}</span>
               <span className="card__airport-tag">({firstArrivalAirportTag})</span>
             </p>
           </div>
           <div className="card__time">
             <p className="card__time-airport">
-              <span className="card__time-hour">{firstDepartureDate}</span>
-              <span className="card__time-date">&#8194;18 авг. вт</span>
+              <span className="card__time-hour">{dayjs(firstDepartureDate).format(`HH:mm`)}</span>
+              <span className="card__time-date">&#8194;{dayjs(firstDepartureDate).format(`DD.MMM.ddd`)}</span>
             </p>
             <p className="card__time-duration">
-              <span className="card__time-symbol">&#9719;</span>
-              <span className="card__time-interval">&#8194;{firstTravelDuration}</span>
+              <span className="card__time-symbol">&#9719;&#8194;</span>
+              <span className="card__time-interval">
+                {`${Math.floor(firstTravelDuration / 60)} ч ${firstTravelDuration % 60} мин`}
+              </span>
             </p>
             <p className="card__time-airport">
-              <span className="card__time-date">18 авг. вт</span>
-              <span className="card__time-hour">&#8194;{firstArrivalDate}</span>
+              <span className="card__time-date">{dayjs(firstArrivalDate).format(`DD.MMM.ddd`)}</span>
+              <span className="card__time-hour">&#8194;{dayjs(firstArrivalDate).format(`HH:mm`)}</span>
             </p>
             {firstTransfer ? <div className="card__time-transfer">1 пересадка</div> : null}
           </div>
@@ -73,27 +75,29 @@ const Card = ({flight}) => {
         <li className="card__li">
           <div className="card__airport">
             <p className="card__airport-paragraph">
-              <span className="card__airport-name">{secondDepartureCity}, {secondDepartureAirport}</span>
+              <span className="card__airport-name">{`${secondDepartureCity}, ${secondDepartureAirport}`}</span>
               <span className="card__airport-tag">({secondDepartureAirportTag})</span>
             </p>
             <span className="card__airport-arrow">&ensp;&#129042;&ensp;</span>
             <p className="card__airport-paragraph">
-              <span className="card__airport-name">{secondArrivalCity}, {secondArrivalAirport}</span>
+              <span className="card__airport-name">{`${secondArrivalCity}, ${secondArrivalAirport}`}</span>
               <span className="card__airport-tag">({secondArrivalAirportTag})</span>
             </p>
           </div>
           <div className="card__time">
             <p className="card__time-airport">
-              <span className="card__time-hour">{secondDepartureDate}</span>
-              <span className="card__time-date">&#8194;18 авг. вт</span>
+              <span className="card__time-hour">{dayjs(secondDepartureDate).format(`HH:mm`)}</span>
+              <span className="card__time-date">&#8194;{dayjs(secondDepartureDate).format(`DD.MMM.ddd`)}</span>
             </p>
             <p className="card__time-duration">
-              <span className="card__time-symbol">&#9719;</span>
-              <span className="card__time-interval">&#8194;{secondTravelDuration}</span>
+              <span className="card__time-symbol">&#9719;&#8194;</span>
+              <span className="card__time-interval">
+                {`${Math.floor(secondTravelDuration / 60)} ч ${secondTravelDuration % 60} мин`}
+              </span>
             </p>
             <p className="card__time-airport">
-              <span className="card__time-date">18 авг. вт</span>
-              <span className="card__time-hour">&#8194;{secondArrivalDate}</span>
+              <span className="card__time-date">{dayjs(secondArrivalDate).format(`DD.MMM.ddd`)}</span>
+              <span className="card__time-hour">&#8194;{dayjs(secondArrivalDate).format(`HH:mm`)}</span>
             </p>
             {secondTransfer ? <div className="card__time-transfer">1 пересадка</div> : null}
           </div>
