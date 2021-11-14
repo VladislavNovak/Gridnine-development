@@ -2,13 +2,15 @@ import React, {useReducer} from 'react';
 import PropTypes from 'prop-types';
 import {ControlContext} from "./controlContext";
 import {controlReducer} from './controlReducer';
+import {getUniqueCarriers} from '../../data/adapter';
 
 import {START_MAX_PRICE, START_MIN_PRICE} from '../../utils/constants';
 import {
   UPDATE_SORT,
   UPDATE_TRANSFER,
   UPDATE_PRICE_RANGE,
-  UPDATE_CARRIER,} from './controlActions';
+  UPDATE_CARRIER,
+  CREATE_DATA_FLIGHTS,} from './controlActions';
 
 import {
   SORT,
@@ -21,9 +23,11 @@ import {
   FILTER_BY_PRICE,
   MIN_PRICE,
   MAX_PRICE,
-  FILTER_BY_CARRIER,} from './controlTypes';
+  FILTER_BY_CARRIER,
+  ADAPTED_FLIGHTS,} from './controlTypes';
 
 const initialState = {
+  [ADAPTED_FLIGHTS]: [],
   [SORT]: {
     [ASCENDING]: {
       name: SORT,
@@ -95,8 +99,9 @@ export const ControlState = ({children}) => {
     dispatch({type: UPDATE_CARRIER, payload});
   };
 
-  const createCarrier = (payload) => {
-    dispatch({type: UPDATE_CARRIER, payload});
+  const createDataFlights = (flights) => {
+    const uniqueCarriers = getUniqueCarriers(flights);
+    dispatch({type: CREATE_DATA_FLIGHTS, payload: {flights, uniqueCarriers}});
   };
 
   const getSortState = () => state[SORT];
@@ -104,30 +109,29 @@ export const ControlState = ({children}) => {
   const getPriceRangeState = () => state[FILTER_BY_PRICE];
   const getCarrierState = () => state[FILTER_BY_CARRIER];
 
-  const getRules = () => {
+  const getProcessedData = (limit = null) => {
+    const data = [...state[ADAPTED_FLIGHTS]];
     const sortRule = Object.values(getSortState()).find(item => item.checked).fn;
+    const sortedData = [...data].sort(sortRule);
+    const rangeData = sortedData.filter(item => (item.price > getPriceRangeState()[MIN_PRICE].value) && (item.price < getPriceRangeState()[MAX_PRICE].value));
 
-    const transfers = Object.values(getTransferState()).filter(item => item.checked).length
-      ? Object.values(getTransferState()).filter(item => item.checked).reduce((total, item) => (total.push(item.transfer), total), [])
-      : [0, 1, 2, 3, 4, 5];
+    const transfers = Object.values(getTransferState())
+      .filter(item => item.checked).length
+        ? Object.values(getTransferState()).filter(item => item.checked).reduce((total, item) => (total.push(item.transfer), total), [])
+        : [0, 1, 2, 3, 4, 5];
 
-    const transferRule = (arr) => (
-      arr.filter(item => transfers.includes(item.totalCountOfTransfer))
-    );
+    const transferData = rangeData.filter(item => transfers.includes(item.totalCountOfTransfer));
 
-    const priceRangeRule = (arr) => (
-      arr.filter(item => (item.price > getPriceRangeState()[MIN_PRICE].value) && (item.price < getPriceRangeState()[MAX_PRICE].value))
-    );
+    const carriers = Object.values(getCarrierState())
+      .filter(item => item.checked).length
+        ? Object.values(getCarrierState()).filter(item => item.checked).reduce((total, item) => (total.push(item.name), total), [])
+        : Object.values(getCarrierState()).reduce((total, item) => (total.push(item.name), total), []);
 
-    const carriers = Object.values(getCarrierState()).filter(item => item.checked).length
-    ? Object.values(getCarrierState()).filter(item => item.checked).reduce((total, item) => (total.push(item.name), total), [])
-    : Object.values(getCarrierState()).reduce((total, item) => (total.push(item.name), total), []);
+    const carrierData = transferData.filter(item => carriers.includes(item.carrier));
 
-    const carrierRule = (arr) => (
-      arr.filter(item => carriers.includes(item.carrier))
-    );
+    const amountOfElements = ((limit === null) || (limit > data.length)) ? limit = data.length : limit;
 
-    return ({sortRule, transferRule, priceRangeRule, carrierRule});
+    return carrierData.slice(0, amountOfElements);
   };
 
   return (
@@ -141,8 +145,8 @@ export const ControlState = ({children}) => {
         getTransferState,
         getPriceRangeState,
         getCarrierState,
-        createCarrier,
-        getRules,
+        getProcessedData,
+        createDataFlights,
         controlState: state
         }} >
         {children}

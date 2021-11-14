@@ -5,13 +5,13 @@ import {MAX_PRICE_LENGTH} from '../../utils/constants';
 const Price = () => {
   const {getPriceRangeState, updatePriceRange} = useContext(ControlContext);
 
-  const chooseByPriceRange = getPriceRangeState();
+  const filterByPriceRange = getPriceRangeState();
 
   const handleChange = ({target: {name, value}}) => {
     const payload = {
-      ...chooseByPriceRange,
+      ...filterByPriceRange,
       [name]: {
-        ...chooseByPriceRange[name], value},
+        ...filterByPriceRange[name], value},
     };
     updatePriceRange(payload);
   };
@@ -20,7 +20,7 @@ const Price = () => {
     <section className="price">
       <p className="price__title">Цена</p>
       <ul>{
-        Object.values(chooseByPriceRange).map(({name, title, value}) => (
+        Object.values(filterByPriceRange).map(({name, title, value}) => (
         <li className="price__li price__li--first" key={name}>
           <label className="price__label" htmlFor={name}>
             {title}

@@ -2,15 +2,19 @@ import {
   UPDATE_SORT,
   UPDATE_TRANSFER,
   UPDATE_PRICE_RANGE,
-  UPDATE_CARRIER} from "./controlActions";
+  CREATE_DATA_FLIGHTS} from "./controlActions";
 
 import {
   FILTER_BY_CARRIER,
   FILTER_BY_PRICE,
   FILTER_BY_TRANSFER,
+  ADAPTED_FLIGHTS,
   SORT} from "./controlTypes";
 
 const handlers = {
+  [CREATE_DATA_FLIGHTS]: (state, {payload: {flights, uniqueCarriers}}) => ({
+    ...state, [ADAPTED_FLIGHTS]: flights, [FILTER_BY_CARRIER]: uniqueCarriers
+  }),
   [UPDATE_SORT]: (state, {payload}) => ({
     ...state, [SORT]: payload
   }),
@@ -19,9 +23,6 @@ const handlers = {
   }),
   [UPDATE_PRICE_RANGE]: (state, {payload}) => ({
     ...state, [FILTER_BY_PRICE]: payload
-  }),
-  [UPDATE_CARRIER]: (state, {payload}) => ({
-    ...state, [FILTER_BY_CARRIER]: payload
   }),
   DEFAULT: state => state,
 };

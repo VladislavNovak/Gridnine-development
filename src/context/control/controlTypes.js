@@ -1,6 +1,8 @@
+export const ADAPTED_FLIGHTS = `adaptedFlights`;
+
 export const SORT = `sortByPrice`;
 export const FILTER_BY_TRANSFER = `chooseByTransfer`;
-export const FILTER_BY_PRICE = `chooseByPriceRange`;
+export const FILTER_BY_PRICE = `filterByPriceRange`;
 export const FILTER_BY_CARRIER = `chooseByCarrier`;
 
 export const ASCENDING = `ascending`;

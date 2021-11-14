@@ -1,35 +1,25 @@
-/* eslint-disable no-unused-vars */
 import React, {useContext, useEffect, useState} from 'react';
 import {ControlContext} from '../../context/control/controlContext';
 import {fetchServerData} from '../../data/fetchData';
-import {DISPLAY} from '../../utils/constants';
+import {QUANTITY_TO_SHOW} from '../../utils/constants';
 import {Card} from '..';
 
-const prepare = (data, {sortRule, transferRule, priceRangeRule, carrierRule}) => {
-  const sortedData = [...data].sort(sortRule);
-  const rangeData = priceRangeRule(sortedData);
-  const transferData = transferRule(rangeData);
-  return carrierRule(transferData);
-};
-
 const Cards = () => {
-  const [data, setData] = useState([]);
-  const [displayed, setDisplayed] = useState(DISPLAY);
-  const {createCarrier, getRules} = useContext(ControlContext);
+  const [displayed, setDisplayed] = useState(QUANTITY_TO_SHOW);
+  const {getProcessedData, createDataFlights} = useContext(ControlContext);
 
-  const slicedData = prepare(data, getRules()).slice(0, displayed);
+  console.log(`сработало`);
+
+  const slicedData = getProcessedData(displayed);
 
   useEffect(() => {
-    if (!data.length) {
-      fetchServerData().then(({flights, uniqueCarriers}) => {
-        setData(flights);
-        createCarrier(uniqueCarriers);
-      });
-    }
+    fetchServerData().then((flights) => {
+      createDataFlights(flights);
+    });
   }, []);
 
   const handleClick = () => {
-    setDisplayed(displayed + DISPLAY);
+    setDisplayed(prevCountShownItems => prevCountShownItems + QUANTITY_TO_SHOW);
   };
 
   return (
@@ -37,8 +27,8 @@ const Cards = () => {
       <ul className="cards__ul">{
         slicedData.map(flight => (
           <Card key={flight.id} flight={flight} />))
-      }</ul>
-      {data.length
+      }</ul>{
+        slicedData.length
         ? (<button
             className="cards__btn-more"
             onClick={handleClick}>Показать еще</button>)
