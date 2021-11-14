@@ -5,23 +5,23 @@ import {
   UPDATE_CARRIER} from "./controlActions";
 
 import {
-  CHOOSE_BY_CARRIER,
-  CHOOSE_BY_PRICE,
-  CHOOSE_BY_TRANSFER,
-  SORT_BY_PRICE} from "./controlTypes";
+  FILTER_BY_CARRIER,
+  FILTER_BY_PRICE,
+  FILTER_BY_TRANSFER,
+  SORT} from "./controlTypes";
 
 const handlers = {
   [UPDATE_SORT]: (state, {payload}) => ({
-    ...state, [SORT_BY_PRICE]: payload
+    ...state, [SORT]: payload
   }),
   [UPDATE_TRANSFER]: (state, {payload}) => ({
-    ...state, [CHOOSE_BY_TRANSFER]: payload
+    ...state, [FILTER_BY_TRANSFER]: payload
   }),
   [UPDATE_PRICE_RANGE]: (state, {payload}) => ({
-    ...state, [CHOOSE_BY_PRICE]: payload
+    ...state, [FILTER_BY_PRICE]: payload
   }),
   [UPDATE_CARRIER]: (state, {payload}) => ({
-    ...state, [CHOOSE_BY_CARRIER]: payload
+    ...state, [FILTER_BY_CARRIER]: payload
   }),
   DEFAULT: state => state,
 };

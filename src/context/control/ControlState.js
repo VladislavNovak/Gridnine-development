@@ -11,52 +11,57 @@ import {
   UPDATE_CARRIER,} from './controlActions';
 
 import {
-  SORT_BY_PRICE,
-  CHOOSE_BY_TRANSFER,
+  SORT,
+  FILTER_BY_TRANSFER,
   ASCENDING,
   DESCENDING,
-  SPEND_TIME,
+  TOTAL_TRAVEL_DURATION,
   ONE_BOARDING,
   DIRECT,
-  CHOOSE_BY_PRICE,
+  FILTER_BY_PRICE,
   MIN_PRICE,
   MAX_PRICE,
-  CHOOSE_BY_CARRIER,} from './controlTypes';
+  FILTER_BY_CARRIER,} from './controlTypes';
 
 const initialState = {
-  [SORT_BY_PRICE]: {
+  [SORT]: {
     [ASCENDING]: {
-      name: SORT_BY_PRICE,
+      name: SORT,
       value: ASCENDING,
       title: `по возрастанию цены`,
       checked: true,
+      fn: (a, b) => (a.price - b.price),
     },
     [DESCENDING]: {
-      name: SORT_BY_PRICE,
+      name: SORT,
       value: DESCENDING,
       title: `по убыванию цены`,
       checked: false,
+      fn: (a, b) => (b.price - a.price),
     },
-    [SPEND_TIME]: {
-      name: SORT_BY_PRICE,
-      value: SPEND_TIME,
+    [TOTAL_TRAVEL_DURATION]: {
+      name: SORT,
+      value: TOTAL_TRAVEL_DURATION,
       title: `по времени в пути`,
       checked: false,
+      fn: (a, b) => (a.totalTravelDuration - b.totalTravelDuration),
     },
   },
-  [CHOOSE_BY_TRANSFER]: {
+  [FILTER_BY_TRANSFER]: {
     [ONE_BOARDING]: {
       name: ONE_BOARDING,
       title: `1 пересадка`,
       checked: false,
+      transfer: 1,
     },
     [DIRECT]: {
       name: DIRECT,
       title: `без пересадок`,
       checked: false,
+      transfer: 0,
     },
   },
-  [CHOOSE_BY_PRICE]: {
+  [FILTER_BY_PRICE]: {
     [MIN_PRICE]: {
       name: MIN_PRICE,
       title: `От`,
@@ -68,7 +73,7 @@ const initialState = {
       value: START_MAX_PRICE,
     },
   },
-  [CHOOSE_BY_CARRIER]: [],
+  [FILTER_BY_CARRIER]: [],
 };
 
 export const ControlState = ({children}) => {
@@ -94,10 +99,36 @@ export const ControlState = ({children}) => {
     dispatch({type: UPDATE_CARRIER, payload});
   };
 
-  const getSortState = () => state[SORT_BY_PRICE];
-  const getTransferState = () => state[CHOOSE_BY_TRANSFER];
-  const getPriceRangeState = () => state[CHOOSE_BY_PRICE];
-  const getCarrierState = () => state[CHOOSE_BY_CARRIER];
+  const getSortState = () => state[SORT];
+  const getTransferState = () => state[FILTER_BY_TRANSFER];
+  const getPriceRangeState = () => state[FILTER_BY_PRICE];
+  const getCarrierState = () => state[FILTER_BY_CARRIER];
+
+  const getRules = () => {
+    const sortRule = Object.values(getSortState()).find(item => item.checked).fn;
+
+    const transfers = Object.values(getTransferState()).filter(item => item.checked).length
+      ? Object.values(getTransferState()).filter(item => item.checked).reduce((total, item) => (total.push(item.transfer), total), [])
+      : [0, 1, 2, 3, 4, 5];
+
+    const transferRule = (arr) => (
+      arr.filter(item => transfers.includes(item.totalCountOfTransfer))
+    );
+
+    const priceRangeRule = (arr) => (
+      arr.filter(item => (item.price > getPriceRangeState()[MIN_PRICE].value) && (item.price < getPriceRangeState()[MAX_PRICE].value))
+    );
+
+    const carriers = Object.values(getCarrierState()).filter(item => item.checked).length
+    ? Object.values(getCarrierState()).filter(item => item.checked).reduce((total, item) => (total.push(item.name), total), [])
+    : Object.values(getCarrierState()).reduce((total, item) => (total.push(item.name), total), []);
+
+    const carrierRule = (arr) => (
+      arr.filter(item => carriers.includes(item.carrier))
+    );
+
+    return ({sortRule, transferRule, priceRangeRule, carrierRule});
+  };
 
   return (
     <ControlContext.Provider
@@ -111,6 +142,7 @@ export const ControlState = ({children}) => {
         getPriceRangeState,
         getCarrierState,
         createCarrier,
+        getRules,
         controlState: state
         }} >
         {children}

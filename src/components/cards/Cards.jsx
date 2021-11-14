@@ -1,15 +1,23 @@
+/* eslint-disable no-unused-vars */
 import React, {useContext, useEffect, useState} from 'react';
 import {ControlContext} from '../../context/control/controlContext';
 import {fetchServerData} from '../../data/fetchData';
 import {DISPLAY} from '../../utils/constants';
 import {Card} from '..';
 
+const prepare = (data, {sortRule, transferRule, priceRangeRule, carrierRule}) => {
+  const sortedData = [...data].sort(sortRule);
+  const rangeData = priceRangeRule(sortedData);
+  const transferData = transferRule(rangeData);
+  return carrierRule(transferData);
+};
+
 const Cards = () => {
   const [data, setData] = useState([]);
   const [displayed, setDisplayed] = useState(DISPLAY);
-  const {createCarrier} = useContext(ControlContext);
+  const {createCarrier, getRules} = useContext(ControlContext);
 
-  const slicedData = data.slice(0, displayed);
+  const slicedData = prepare(data, getRules()).slice(0, displayed);
 
   useEffect(() => {
     if (!data.length) {

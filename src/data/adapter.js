@@ -14,6 +14,8 @@ const convertDataToClient = ({flightToken, flight}) => {
     id: flightToken,
     carrier: flight.carrier.caption,
     price: Number(flight.price.totalFeeAndTaxes.amount),
+    totalTravelDuration: firstTravelDuration + secondTravelDuration,
+    totalCountOfTransfer: firstTransfer + secondTransfer,
 
     firstTravelDuration,
     firstAirline: flight.legs[0].segments[0].airline.caption,
