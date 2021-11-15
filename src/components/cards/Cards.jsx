@@ -8,14 +8,14 @@ const Cards = () => {
   const [displayed, setDisplayed] = useState(QUANTITY_TO_SHOW);
   const {getProcessedData, createDataFlights} = useContext(ControlContext);
 
-  console.log(`сработало`);
-
   const slicedData = getProcessedData(displayed);
 
   useEffect(() => {
-    fetchServerData().then((flights) => {
-      createDataFlights(flights);
-    });
+    fetchServerData()
+      .then((flights) => createDataFlights(flights))
+      .catch(error => {
+        console.log(`Error: `, error);
+      });
   }, []);
 
   const handleClick = () => {
@@ -42,5 +42,5 @@ export default Cards;
 // В fetchServerData можно передать количество запрашиваемых элементов массива.
 // Если число не указано, извлекаться будут все элементы
 // В контексте масштабирования это может понадобиться, например,
-// чтобы ограничить размен получаемых данных
+// чтобы ограничить размер получаемых данных
 // В текущем приложении подобная возможность необходима только для разработки.
